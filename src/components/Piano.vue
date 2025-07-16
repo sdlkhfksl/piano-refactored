@@ -111,7 +111,7 @@ let keyLock = false
 let lastKeyCode = ''
 
 const getNoteByKeyCode = (keyCode) => {
-  return Notes.find(note => note.keyCode == keyCode)
+  return Notes.find(note => String(note.keyCode) == String(keyCode))
 }
 
 const getNoteByName = (name) => {
@@ -119,7 +119,12 @@ const getNoteByName = (name) => {
 }
 
 const playNote = (notename = 'C4', duration = '8n') => {
-  if (!synth) return
+  if (!synth) {
+    // Initialize Tone.js synth on first user interaction
+    synth = SampleLibrary.load({
+      instruments: "piano"
+    }).toDestination()
+  }
   try {
     synth.triggerAttackRelease(notename, duration)
   } catch (e) {
@@ -150,8 +155,13 @@ const setListener = () => {
 }
 
 onMounted(() => {
-  initPiano()
+  // initPiano() // Removed, now initialized on first interaction
   setListener()
+  setTimeout(() => {
+    computeEleSize()
+    pianoShow.value = true
+  }, 300)
+  bindKeyBoradEvent()
 })
 
 onBeforeUnmount(() => {
@@ -175,15 +185,7 @@ onBeforeUnmount(() => {
 })
 
 const initPiano = async () => {
-  setTimeout(() => {
-    computeEleSize()
-    pianoShow.value = true
-  }, 300)
-  bindKeyBoradEvent()
-
-  synth = SampleLibrary.load({
-    instruments: "piano"
-  }).toDestination()
+  // This function is now mostly for initial setup, not synth initialization
 }
 
 const computeEleSize = () => {
@@ -208,12 +210,14 @@ const bindKeyBoradEvent = () => {
     if (keyCode == ShiftKeyCode) {
       enableBlackKey.value = true
     }
-    if (enableBlackKey.value) keyCode = 'b' + keyCode
+    // Ensure keyCode is string for comparison
+    let currentKeyCode = String(keyCode)
+    if (enableBlackKey.value) currentKeyCode = 'b' + currentKeyCode
 
-    if (keyCode == lastKeyCode) {
+    if (currentKeyCode == lastKeyCode) {
       if (!keyLock) {
-        playNoteByKeyCode(keyCode)
-        lastKeyCode = keyCode
+        playNoteByKeyCode(currentKeyCode)
+        lastKeyCode = currentKeyCode
         keyLock = true
       }
       if (keydownTimer) {
@@ -224,8 +228,8 @@ const bindKeyBoradEvent = () => {
         keyLock = false
       }, 120)
     } else {
-      playNoteByKeyCode(keyCode)
-      lastKeyCode = keyCode
+      playNoteByKeyCode(currentKeyCode)
+      lastKeyCode = currentKeyCode
     }
   }, false)
 
