@@ -1,1 +1,0 @@
-import{_ as s,c as r,b as n,g as t}from"./index-B7Cu4I2H.js";const i={};function l(o,e){return t(),r("div",null,e[0]||(e[0]=[n("h1",null,"Friend Links",-1),n("p",null,"This is the friend links page.",-1)]))}const c=s(i,[["render",l]]);export{c as default};

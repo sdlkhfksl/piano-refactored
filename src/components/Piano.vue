@@ -111,11 +111,14 @@ let keyLock = false
 let lastKeyCode = ''
 
 const getNoteByKeyCode = (keyCode) => {
-  return Notes.find(note => String(note.keyCode) == String(keyCode))
+  console.log('Searching for keyCode:', keyCode);
+  const foundNote = Notes.find(note => String(note.keyCode) === String(keyCode));
+  console.log('Found note:', foundNote);
+  return foundNote;
 }
 
 const getNoteByName = (name) => {
-  return Notes.find(note => note.name == name)
+  return Notes.find(note => note.name === name);
 }
 
 const playNote = (notename = 'C4', duration = '8n') => {
@@ -123,70 +126,70 @@ const playNote = (notename = 'C4', duration = '8n') => {
     // Initialize Tone.js synth on first user interaction
     synth = SampleLibrary.load({
       instruments: "piano"
-    }).toDestination()
+    }).toDestination();
   }
   try {
-    synth.triggerAttackRelease(notename, duration)
+    synth.triggerAttackRelease(notename, duration);
   } catch (e) {
-    console.error(e)
+    console.error(e);
   }
 }
 
-const { playScoreByName, pauseAutoPlay: pauseNumberAutoPlay } = usePianoAutoPlay(playNote, getNoteByName)
-const { addToPlayQueue, pauseXMLPlay } = useXmlAutoPlay(playNote)
+const { playScoreByName, pauseAutoPlay: pauseNumberAutoPlay } = usePianoAutoPlay(playNote, getNoteByName);
+const { addToPlayQueue, pauseXMLPlay } = useXmlAutoPlay(playNote);
 
 const setListener = () => {
-  window.onresize = computeEleSize
-  window.onorientationchange = computeEleSize
+  window.onresize = computeEleSize;
+  window.onorientationchange = computeEleSize;
 
   window.addEventListener(OBEvent.AUTO_PLAY_NUM_SCORE, (event) => {
-    playScoreByName(event.detail.scorename)
-  })
+    playScoreByName(event.detail.scorename);
+  });
   window.addEventListener(OBEvent.AUTO_PLAY_XML_SCORE, (event) => {
-    addToPlayQueue(event.detail.musicScore)
-  })
+    addToPlayQueue(event.detail.musicScore);
+  });
   window.addEventListener(OBEvent.PAUSE_AUTO_PLAY, () => {
-    pauseNumberAutoPlay()
-    pauseXMLPlay()
-  })
+    pauseNumberAutoPlay();
+    pauseXMLPlay();
+  });
   window.addEventListener(OBEvent.PAUSE_XML_AUTO_PLAY, () => {
-    pauseXMLPlay()
-  })
-}
+    pauseXMLPlay();
+  });
+};
 
 onMounted(() => {
   // initPiano() // Removed, now initialized on first interaction
-  setListener()
+  setListener();
   setTimeout(() => {
-    computeEleSize()
-    pianoShow.value = true
-  }, 300)
-  bindKeyBoradEvent()
-})
+    computeEleSize();
+    pianoShow.value = true;
+  }, 300);
+  bindKeyBoradEvent();
+});
 
 onBeforeUnmount(() => {
-  keydownTimer = null
-  pauseNumberAutoPlay()
-  pauseXMLPlay()
+  keydownTimer = null;
+  pauseNumberAutoPlay();
+  pauseXMLPlay();
   // Remove event listeners to prevent memory leaks
   window.removeEventListener(OBEvent.AUTO_PLAY_NUM_SCORE, (event) => {
-    playScoreByName(event.detail.scorename)
-  })
+    playScoreByName(event.detail.scorename);
+  });
   window.removeEventListener(OBEvent.AUTO_PLAY_XML_SCORE, (event) => {
-    addToPlayQueue(event.detail.musicScore)
-  })
+    addToPlayQueue(event.detail.musicScore);
+  });
   window.removeEventListener(OBEvent.PAUSE_AUTO_PLAY, () => {
-    pauseNumberAutoPlay()
-    pauseXMLPlay()
-  })
+    pauseNumberAutoPlay();
+    pauseXMLPlay();
+  });
   window.removeEventListener(OBEvent.PAUSE_XML_AUTO_PLAY, () => {
-    pauseXMLPlay()
-  })
-})
+    pauseXMLPlay();
+  });
+});
 
 const initPiano = async () => {
   // This function is now mostly for initial setup, not synth initialization
-}
+};
 
 const computeEleSize = () => {
   const pianoKeyWrap = document.querySelector('.piano-key-wrap');
@@ -199,67 +202,69 @@ const computeEleSize = () => {
       bkey.style.height = `${bkey_height}px`;
     });
   }
-}
+};
 
 const bindKeyBoradEvent = () => {
-  const ShiftKeyCode = 16
+  const ShiftKeyCode = 16;
   document.addEventListener('keydown', (e) => {
-    let keyCode = e.keyCode
-    if (DEV.value) console.log('keydown', keyCode)
+    let keyCode = e.keyCode;
+    if (DEV.value) console.log('keydown', keyCode);
 
-    if (keyCode == ShiftKeyCode) {
-      enableBlackKey.value = true
+    if (keyCode === ShiftKeyCode) {
+      enableBlackKey.value = true;
     }
     // Ensure keyCode is string for comparison
-    let currentKeyCode = String(keyCode)
-    if (enableBlackKey.value) currentKeyCode = 'b' + currentKeyCode
+    let currentKeyCode = String(keyCode);
+    if (enableBlackKey.value) currentKeyCode = 'b' + currentKeyCode;
 
-    if (currentKeyCode == lastKeyCode) {
+    if (currentKeyCode === lastKeyCode) {
       if (!keyLock) {
-        playNoteByKeyCode(currentKeyCode)
-        lastKeyCode = currentKeyCode
-        keyLock = true
+        playNoteByKeyCode(currentKeyCode);
+        lastKeyCode = currentKeyCode;
+        keyLock = true;
       }
       if (keydownTimer) {
-        clearTimeout(keydownTimer)
-        keydownTimer = null
+        clearTimeout(keydownTimer);
+        keydownTimer = null;
       }
       keydownTimer = setTimeout(() => {
-        keyLock = false
-      }, 120)
+        keyLock = false;
+      }, 120);
     } else {
-      playNoteByKeyCode(currentKeyCode)
-      lastKeyCode = currentKeyCode
+      playNoteByKeyCode(currentKeyCode);
+      lastKeyCode = currentKeyCode;
     }
-  }, false)
+  }, false);
 
   document.addEventListener('keyup', (e) => {
-    let keyCode = e.keyCode
-    if (keyCode == ShiftKeyCode) {
-      enableBlackKey.value = false
+    let keyCode = e.keyCode;
+    if (keyCode === ShiftKeyCode) {
+      enableBlackKey.value = false;
     }
-    document.querySelectorAll('.wkey').forEach(el => el.classList.remove('wkey-active'))
-    document.querySelectorAll('.bkey').forEach(el => el.classList.remove('bkey-active'))
-  }, false)
-}
+    document.querySelectorAll('.wkey').forEach(el => el.classList.remove('wkey-active'));
+    document.querySelectorAll('.bkey').forEach(el => el.classList.remove('bkey-active'));
+  }, false);
+};
 
 const clickPianoKey = (e, keyCode) => {
-  let pressedNote = getNoteByKeyCode(keyCode)
+  let pressedNote = getNoteByKeyCode(keyCode);
   if (pressedNote) {
-    playNote(pressedNote.name)
+    playNote(pressedNote.name);
   }
-}
+};
 
 const playNoteByKeyCode = (keyCode) => {
-  let pressedNote = getNoteByKeyCode(keyCode)
+  console.log('Playing note for keyCode:', keyCode);
+  let pressedNote = getNoteByKeyCode(keyCode);
   if (pressedNote) {
-    playNote(pressedNote.name)
+    console.log('Pressed note details:', pressedNote);
+    playNote(pressedNote.name);
     let keyType = pressedNote.type;
     const targetKey = document.querySelector(`[data-keyCode="${pressedNote.keyCode}"]`);
     if (targetKey) {
-      if (keyType == 'white') {
+      if (keyType === 'white') {
         targetKey.classList.add('wkey-active');
-      } else if (keyType == 'black') {
+      } else if (keyType === 'black') {
         targetKey.classList.add('bkey-active');
       }
     }
