@@ -1,4 +1,4 @@
-const noteBaseUrl = '/static/notes/'
+const noteBaseUrl = '/static/samples/piano/'
 
 export default [
   {id: 1, name: 'C2', keyCode: '49', key: '1', url: noteBaseUrl + 'a49.mp3', type: 'white'},

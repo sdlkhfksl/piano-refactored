@@ -7,3 +7,5 @@ export const OBEvent = {
 
   CHANGE_WALLPAPER: 'CHANGE_WALLPAPER'
 }
+
+export const CDN_JSDELIVR_STATIC = 'https://cdn.jsdelivr.net/gh/warpprism/cdn@latest/autopiano/static/'

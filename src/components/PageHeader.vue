@@ -54,17 +54,12 @@ const emitChangeWallPaper = () => {
 
 const setRandomWallPaper = () => {
   wallpaperLoading.value = true
-  // Wallpaper data is missing, using a placeholder for now
-  const Wallpaper = [
-    'https://cdn.jsdelivr.net/gh/warpprism/cdn@latest/autopiano/static/images/bg_default.jpg',
-    'https://cdn.jsdelivr.net/gh/warpprism/cdn@latest/autopiano/static/images/bg_1.jpg',
-    'https://cdn.jsdelivr.net/gh/warpprism/cdn@latest/autopiano/static/images/bg_2.jpg',
-  ]
-  let len = Wallpaper.length
+  // Wallpaper data is now managed by Vuex store
+  let len = store.getters.$wallpaperList.length // Assuming $wallpaperList getter exists
   let src = ''
   do {
     let random = Math.floor(Math.random() * len)
-    src = Wallpaper[random]
+    src = store.getters.$wallpaperList[random]
   } while (!src || src == store.getters.$currentWallpaper)
 
   let img = new Image();

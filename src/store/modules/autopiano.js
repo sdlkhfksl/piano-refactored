@@ -1,4 +1,4 @@
-const CDN_JSDELIVR_STATIC = 'https://cdn.jsdelivr.net/gh/sdlkhfksl/piano@master/'
+import { CDN_JSDELIVR_STATIC } from '@/config/constants'
 
 // mutation name
 const SET_WALLPAPER = 'SET_WALLPAPER'
