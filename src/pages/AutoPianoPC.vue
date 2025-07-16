@@ -5,16 +5,16 @@
     <div class="app-content">
       <!-- <VueLivere nodeBelowSelector=".blank-page-pc"/> -->
       <PageHeader></PageHeader>
-      <!-- <RandomLyric></RandomLyric> -->
+      <RandomLyric></RandomLyric>
       <Piano></Piano>
       <div class="score-section responsive-section-a">
-        <!-- <ManualPlayScoreList></ManualPlayScoreList> -->
-        <!-- <AutoPlayScoreList></AutoPlayScoreList> -->
+        <ManualPlayScoreList></ManualPlayScoreList>
+        <AutoPlayScoreList></AutoPlayScoreList>
       </div>
       <div class="right-drawer" :class="{'show': rightDrawerShow}">
         <div class="trigger" @click="toggleRightDrawer">歌曲列表</div>
         <div class="close" @click="hideRightDrawer">X</div>
-        <!-- <ManualPlayScoreList></ManualPlayScoreList> -->
+        <ManualPlayScoreList></ManualPlayScoreList>
       </div>
       <div class="blank-page-pc" style="height: 200px;"></div>
       <PageFooter></PageFooter>
