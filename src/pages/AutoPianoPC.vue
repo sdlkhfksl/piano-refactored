@@ -4,7 +4,7 @@
 
     <div class="app-content">
       <!-- <VueLivere nodeBelowSelector=".blank-page-pc"/> -->
-      <!-- <PageHeader></PageHeader> -->
+      <PageHeader></PageHeader>
       <!-- <RandomLyric></RandomLyric> -->
       <Piano></Piano>
       <div class="score-section responsive-section-a">
@@ -17,7 +17,7 @@
         <!-- <ManualPlayScoreList></ManualPlayScoreList> -->
       </div>
       <div class="blank-page-pc" style="height: 200px;"></div>
-      <!-- <PageFooter></PageFooter> -->
+      <PageFooter></PageFooter>
 
       <button @click="playTestScore">播放小星星</button>
     </div>
@@ -29,6 +29,8 @@
 import { ref, computed } from 'vue'
 import { useStore } from 'vuex'
 import Piano from '../components/Piano.vue'
+import PageHeader from '../components/PageHeader.vue'
+import PageFooter from '../components/PageFooter.vue'
 import { OBEvent } from '@/config/constants'
 
 const store = useStore()
